@@ -39,13 +39,13 @@ export default class TabsControl extends React.PureComponent {
     }
     tabClick(ele) {
         this.setState({ currentTabId: ele.id })
-        this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
+        this.props.configure.tabClick&&this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
     }
     tabClose(tab) { //移除tab是否需要把对应的在files中的文件也从内存中移除
         let tabs = [...this.state.tabs];
         const removeIndex = tabs.indexOf(tab);
         var currentTabId = this.state.currentTabId;
-        var active_tab;
+        //var active_tab;
         tabs.splice(removeIndex, 1)
         if (tab.id === currentTabId) {
             if (removeIndex === tabs.length && tabs.length !== 0) { //最后一个且删除后的数组不为空
@@ -68,16 +68,21 @@ export default class TabsControl extends React.PureComponent {
         else { //不是当前tab,currentTabId不变
             currentTabId = this.state.currentTabId;
         }
-        tabs.forEach(tab => {
-            if (tab.id === currentTabId) {
-                active_tab = tab;
-            }
-        });
-        this.props.configure.tabClose(tab).then((value) => {
+        // tabs.forEach(tab => {
+        //     if (tab.id === currentTabId) {
+        //         active_tab = tab;
+        //     }
+        // });
+        this.props.configure.tabClose&&this.props.configure.tabClose(tab).then((value) => {
             this.setState({
                 tabs: tabs,
                 currentTabId: value?value:currentTabId
             })
+        }, () => {
+                this.setState({
+                    tabs: tabs,
+                    currentTabId: currentTabId
+                })
         });
 
 
