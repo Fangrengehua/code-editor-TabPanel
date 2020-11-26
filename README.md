@@ -39,7 +39,7 @@
         content:(string)要显示的title内容
     }
 
-    - *导航栏标签* 点击事件
+    - **导航栏标签** 点击事件
     
         tabClick:(tab)=>{}
     
@@ -49,7 +49,7 @@
             返回值：promise
             
 
-    - *导航栏标签关闭* 点击事件
+    - **导航栏标签关闭** 点击事件
     
         tabClose: (tab,active_tab)=>{}
         
