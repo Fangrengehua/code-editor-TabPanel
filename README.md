@@ -32,7 +32,7 @@
         }]
      
         
->Optional**configure: 相关事件配置**
+>(可选项) **configure: 相关事件配置**
 
     - title: (object)
     
