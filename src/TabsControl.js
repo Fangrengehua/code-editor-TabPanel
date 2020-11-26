@@ -55,7 +55,7 @@ export default class TabsControl extends React.PureComponent {
             else if (removeIndex === 0) {//第一个
                 if (tabs.length === 0) {  //删除后数组为空
                     currentTabId = -1;
-                    active_tab = null;
+                    //active_tab = null;
                 }
                 else { //删除后数组不为空
                     currentTabId = tabs[removeIndex].id;
@@ -73,7 +73,7 @@ export default class TabsControl extends React.PureComponent {
         //         active_tab = tab;
         //     }
         // });
-        this.props.configure.tabClose&&this.props.configure.tabClose(tab).then((value) => {
+        this.props.configure.tabClose?this.props.configure.tabClose(tab).then((value) => {
             this.setState({
                 tabs: tabs,
                 currentTabId: value?value:currentTabId
@@ -83,7 +83,10 @@ export default class TabsControl extends React.PureComponent {
                     tabs: tabs,
                     currentTabId: currentTabId
                 })
-        });
+        }) : this.setState({
+            tabs: tabs,
+            currentTabId: currentTabId
+        })
 
 
     }
