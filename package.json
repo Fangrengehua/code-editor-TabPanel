@@ -1,12 +1,35 @@
 {
-  "name": "file-code-editor",
-  "version": "1.0.1",
+  "name": "tab-code-editor",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "devDependencies": {
+    "@types/react": "^16.8.3",
+    "@typescript-eslint/eslint-plugin": "^3.10.0",
+    "@typescript-eslint/parser": "^3.10.0",
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
+    "prettier": "^2.1.0",
+    "react": "^16.8.3",
+    "typescript": "^4.0.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "rimraf": "^3.0.2"
+  },
+  "peerDependencies": {
+    "@types/react": "^16.x",
+    "react": "^16.x"
+  },
   "dependencies": {
-    "monaco-editor": "^0.21.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "monaco-editor": "*",
+    "prop-types": "^15.7.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,11 +38,5 @@
     "prepublish": "npm run cleanLib && npm run bableBuild"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "rimraf": "^3.0.2"
-  }
+  "license": "ISC"
 }
