@@ -39,7 +39,9 @@ export default class TabsControl extends React.PureComponent {
     }
     tabClick(ele) {
         this.setState({ currentTabId: ele.id })
-        this.props.configure.tabClick&&this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
+        if (this.props.configure) {
+            this.props.configure.tabClick && this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
+        }
     }
     tabClose(tab) { //移除tab是否需要把对应的在files中的文件也从内存中移除
         let tabs = [...this.state.tabs];
@@ -73,17 +75,21 @@ export default class TabsControl extends React.PureComponent {
         //         active_tab = tab;
         //     }
         // });
-        this.props.configure.tabClose?this.props.configure.tabClose(tab).then((value) => {
-            this.setState({
-                tabs: tabs,
-                currentTabId: value?value:currentTabId
-            })
-        }, () => {
+        if (this.props.configure) {
+            this.props.configure.tabClose && this.props.configure.tabClose(tab).then((value) => {
+                this.setState({
+                    tabs: tabs,
+                    currentTabId: value ? value : currentTabId
+                })
+            }, () => {
                 this.setState({
                     tabs: tabs,
                     currentTabId: currentTabId
                 })
-        }) : this.setState({
+            })
+            return;
+        }
+        this.setState({
             tabs: tabs,
             currentTabId: currentTabId
         })
@@ -149,13 +155,20 @@ export default class TabsControl extends React.PureComponent {
     render() {
         const { tabs } = this.state;
         const { configure } = this.props;
-        const tab_title = configure.title ? (configure.title.show_title ? configure.title.content : null) : null
+        var tab_title = null;
         return (
             <div className="tabsControl">
                 {/*动态生成Tab导航*/}
                 <ul className="Tab_tittle_wrap">
                     {tabs.map((ele) => {
                         const id = "title_" + ele.id
+                        if (configure) {
+                            tab_title = configure.title ?
+                                (configure.title.show_title ?
+                                    (configure.title.content ? configure.title.content : ele.name)
+                                    : null)
+                                : null
+                        }
                         return (
                             <li id={id} className={this.check_tittle_index(ele.id)} key={ele.id} title={tab_title}>
                                 <div>
@@ -192,5 +205,4 @@ export default class TabsControl extends React.PureComponent {
         )
     }
 }
-
 
