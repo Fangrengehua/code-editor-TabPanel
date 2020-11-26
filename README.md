@@ -60,7 +60,7 @@
             返回值：promise
 
 
-> **获取组件实例对象：this.onRef**
+> **获取组件实例对象：this.tab_control**
 
 在调用本组件的组件内部定义onRef
 
@@ -72,19 +72,19 @@
 
     <TabsControl onRef={this.onRef}/>
     
-之后可以通过 this.onRef 调用本组件内的方法：
+之后可以通过 this.tab_control 调用本组件内的方法：
 
-    - this.onRef.openInTab(tab)
+    - this.tab_control.openInTab(tab)
             
         参数说明：(tab)要打开/激活的tab
         无返回值
 
-    - this.onRef.tabClose(tab)
+    - this.tab_control.tabClose(tab)
             
         参数说明：(tab)要关闭的tab
         无返回值
 
-    - this.onRef.getValue()
+    - this.tab_control.getValue()
 
         返回值：(string)当前打开的编辑器的value
 
