@@ -36,7 +36,7 @@
 
     - title: (object)
     
-        - show_title: (bool)鼠标悬浮在导航栏标签上时，是否显示title,
+        - show_title: (bool)鼠标悬浮在导航栏标签上时，是否显示title
         - content:(string)要显示的title内容
     
     - 点击导航栏标签   
@@ -51,19 +51,18 @@
 
     - 关闭导航栏标签
     
-        tabClose: (tab,active_tab)=>{}
+        tabClose: (tab)=>{}
         
             参数说明：
             - tab: (tab)关闭的导航栏标签数据
-            - active_tab: (tab)关闭后激活的导航栏标签数据，若关闭的标签为导航栏中的唯一存在的标签，则active_tab=null(即不存在下一个激活标签)
             
-            返回值：promise
+            返回值：promise (可以通过resolve(nextTabId)指定下一个需要激活的tab id.默认激活当前tab,若关闭的是当前tab,则激活前一个tab)
 
 ## Using
 
 > **webpack配置**
 
-由于本组件依赖于monaco-editor，而monaco-editor的实现采用worker的方式，为了引用其中内置的语言及控件来实现代码高亮、自动补全以及错误提示等功能，使用前请先进行webpack配置：
+由于本组件依赖于monaco-editor，而monaco-editor的实现采用worker的方式，为了能够正常引用其中内置的语言及控件来实现代码高亮、自动补全以及错误提示等功能，使用前请先进行webpack配置：
 
 1. 安装monaco-editor-webpack-plugin：
 
@@ -110,7 +109,7 @@
 
     - this.tab_control.getValue()
 
-        返回值：(string)当前打开的编辑器的value
+        返回值：value 当前打开的编辑器的内容(string)
 
 
 ## example
@@ -155,11 +154,11 @@ export default class App extends React.PureComponent{
           }
         })
       },
-      tabClose: (tab,active_tab) => {
-        console.log("tabClose", tab,active_tab)
+      tabClose: (tab) => {
+        console.log("tabClose", tab)
         return new Promise((resolve, reject) => {
           if (1 < 2) {
-            resolve()
+            resolve(2) //激活id为2的tab
           } else {
             reject("保存失败！")
           }

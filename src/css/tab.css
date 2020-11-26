@@ -21,7 +21,7 @@ li.Tab_tittle{
 }
 li.Tab_tittle :hover{
     color: black;
-    background-color:#fafafa;
+    /* background-color:#fafafa; */
 }
 li.Tab_tittle.active{
     color: black;

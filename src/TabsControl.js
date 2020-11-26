@@ -73,10 +73,10 @@ export default class TabsControl extends React.PureComponent {
                 active_tab = tab;
             }
         });
-        this.props.configure.tabClose(tab, active_tab).then(() => {
+        this.props.configure.tabClose(tab).then((value) => {
             this.setState({
                 tabs: tabs,
-                currentTabId: currentTabId,
+                currentTabId: value?value:currentTabId
             })
         });
 
