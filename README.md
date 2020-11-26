@@ -34,22 +34,22 @@
         
 2. **configure: 相关事件配置**
 
-    - title: {
-        show_title: (bool)鼠标悬浮在导航栏标签上时，是否显示title,
-        content:(string)要显示的title内容
-    }
-
-    - **导航栏标签** 点击事件
+    - title: (object)
+    
+        - show_title: (bool)鼠标悬浮在导航栏标签上时，是否显示title,
+        - content:(string)要显示的title内容
+    
+    - 点击导航栏标签   
     
         tabClick:(tab)=>{}
-    
+
             参数说明：
             - tab: (tab)点击的导航栏标签数据
             
             返回值：promise
             
 
-    - **导航栏标签关闭** 点击事件
+    - 关闭导航栏标签
     
         tabClose: (tab,active_tab)=>{}
         
@@ -59,8 +59,32 @@
             
             返回值：promise
 
+## Using
 
-> **获取组件实例对象：this.tab_control**
+> **webpack配置**
+
+由于本组件依赖于monaco-editor，而monaco-editor的实现采用worker的方式，为了引用其中内置的语言及控件来实现代码高亮、自动补全以及错误提示等功能，使用前请先进行webpack配置：
+
+1. 安装monaco-editor-webpack-plugin：
+
+    `npm install monaco-editor-webpack-plugin`
+
+2. 将 monaco-editor-webpack-plugin 引入进你的 webpack.config.js:
+
+    ```
+    const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+    module.exports = {
+    plugins: [
+        ...
+        new MonacoWebpackPlugin({
+        languages: ['json']
+        }),
+        ...
+    ]};
+    ```
+    
+
+> **获取组件实例对象**
 
 在调用本组件的组件内部定义onRef
 

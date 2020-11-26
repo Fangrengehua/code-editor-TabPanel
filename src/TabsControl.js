@@ -14,17 +14,7 @@ export default class TabsControl extends React.PureComponent {
     }
 
     componentDidMount() {
-        const _this = this;
         this.props.onRef && this.props.onRef(this)
-        document.onkeydown = function () {
-            var oEvent = window.event;
-            if (oEvent.keyCode === 83 && oEvent.ctrlKey) {  //ctrl+s
-                let cur_code = _this.monaco.current.editor.getValue();
-                console.log("你按下了ctrl+s", cur_code);
-                _this.props.configure.saveValue(cur_code)
-                oEvent.preventDefault();
-            }
-        }
     }
     check_tittle_index(tabId) {
         return tabId === this.state.currentTabId ? "Tab_tittle active" : "Tab_tittle";
@@ -92,6 +82,10 @@ export default class TabsControl extends React.PureComponent {
 
 
     }
+    getValue() {
+        var value = this.monaco.current.editor.getValue()
+        return value;
+    }
     makeIcoClass(filename) {
         const consts = {
             IMAGE: ["jpeg", "jpg", "png", "bmp", "gif"],
@@ -102,8 +96,6 @@ export default class TabsControl extends React.PureComponent {
         }
         var type;
         var icoCss = "";
-        // //获取文件名
-        // var nameStr = node.name;
         //得到文件类型
         var FileType = filename.split('.');
         //文件图标，在css中定义其位置，图标使用node.icon属性定义其路径（makeNodeIcoStyle）
@@ -182,7 +174,6 @@ export default class TabsControl extends React.PureComponent {
                                     language={this.setLanguage(ele.name)}
                                     theme={this.props.theme ? this.props.theme : "vs-dark"}
                                     value={ele.value}
-                                    tab={ele}
                                     className={ele.name}
                                 />
                             </div>
