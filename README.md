@@ -51,10 +51,11 @@
 
     - 关闭导航栏标签
     
-        tabClose: (tab)=>{}
+        tabClose: (tab,active_tab)=>{}
         
             参数说明：
             - tab: (tab)关闭的导航栏标签数据
+            - active_tab: (tab)下一个激活的tab。若关闭的tab为当前唯一存在的tab，则active_tab=null
             
             返回值：promise (可以通过resolve(nextTabId)指定下一个需要激活的tab id.默认激活当前tab,若关闭的是当前tab,则激活前一个tab)
 
@@ -85,15 +86,10 @@
 
 > **获取组件实例对象**
 
-在调用本组件的组件内部定义onRef
-
-    onRef = (ref) => {
-      this.tab_control = ref;
-    }
     
 在本组件上指定属性onRef
 
-    <TabsControl onRef={this.onRef}/>
+    <TabsControl onRef={(ref) => {this.tab_control = ref;}}/>
     
 之后可以通过 this.tab_control 调用本组件内的方法：
 
@@ -105,6 +101,11 @@
     - this.tab_control.tabClose(tab)
             
         参数说明：(tab)要关闭的tab
+        无返回值
+
+    - this.tab_control.tabReset(tab)
+
+        参数说明：(tab)要重置的tab
         无返回值
 
     - this.tab_control.getValue()

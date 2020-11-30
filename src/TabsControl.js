@@ -1,7 +1,7 @@
 import React from 'react'
 import CodeEditor from './MonacoEditor'
-import closeBT from '../src/css/closeBT.png'
-import '../src/css/tab.css'
+import closeBT from './css/closeBT.png'
+import './css/tab.css'
 
 export default class TabsControl extends React.PureComponent {
     constructor(props) {
@@ -11,24 +11,30 @@ export default class TabsControl extends React.PureComponent {
             currentTabId: -1,
             tabs: props.tabs
         }
+        this.tabReset.bind(this);
+        this.tabClose.bind(this);
+        this.openInTab.bind(this);
+        this.getValue.bind(this);
     }
 
     componentDidMount() {
         this.props.onRef && this.props.onRef(this)
     }
-    check_tittle_index(tabId) {
+    checkTittleIndex(tabId) {
         return tabId === this.state.currentTabId ? "Tab_tittle active" : "Tab_tittle";
     }
-    check_item_index(tabId) {
+    checkItemIndex(tabId) {
         return tabId === this.state.currentTabId ? 'Tab_item show' : 'Tab_item';
     }
     openInTab(tab) {
         var tabs = this.state.tabs;
-        if (tabs.indexOf(tab) !== -1) { //已经在tabs打开
-            this.setState({
-                currentTabId: tab.id
-            })
-            return;
+        for (let i = 0; i < tabs.length; i++) { //已经在tabs中打开
+            if (tabs[i].id === tab.id) {
+                this.setState({
+                    currentTabId: tab.id
+                })
+                return;
+            }
         }
         //还没在tabs中打开
         tabs.push(tab);
@@ -36,30 +42,28 @@ export default class TabsControl extends React.PureComponent {
             tabs: tabs,
             currentTabId: tab.id
         })
-    }
-    tabClick(ele) {
+    }    tabClick(ele) {
         this.setState({ currentTabId: ele.id })
         if (this.props.configure) {
             this.props.configure.tabClick && this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
         }
     }
-    tabClose(tab) { //移除tab是否需要把对应的在files中的文件也从内存中移除
+    tabClose(tab) {
         let tabs = [...this.state.tabs];
         const removeIndex = tabs.indexOf(tab);
         var currentTabId = this.state.currentTabId;
-        //var active_tab;
+        var active_tab;
         tabs.splice(removeIndex, 1)
         if (tab.id === currentTabId) {
             if (removeIndex === tabs.length && tabs.length !== 0) { //最后一个且删除后的数组不为空
-                var nextIndex = removeIndex - 1;
+                let nextIndex = removeIndex - 1;
                 currentTabId = tabs[nextIndex].id;
             }
             else if (removeIndex === 0) {//第一个
                 if (tabs.length === 0) {  //删除后数组为空
                     currentTabId = -1;
-                    //active_tab = null;
-                }
-                else { //删除后数组不为空
+                    active_tab = null;
+                } else { //删除后数组不为空
                     currentTabId = tabs[removeIndex].id;
                 }
             }
@@ -67,16 +71,13 @@ export default class TabsControl extends React.PureComponent {
                 currentTabId = tabs[removeIndex].id;
             }
         }
-        else { //不是当前tab,currentTabId不变
-            currentTabId = this.state.currentTabId;
-        }
-        // tabs.forEach(tab => {
-        //     if (tab.id === currentTabId) {
-        //         active_tab = tab;
-        //     }
-        // });
+        tabs.forEach(tab => {
+            if (tab.id === currentTabId) {
+                active_tab = tab;
+            }
+        });
         if (this.props.configure) {
-            this.props.configure.tabClose && this.props.configure.tabClose(tab).then((value) => {
+            this.props.configure.tabClose && this.props.configure.tabClose(tab, active_tab).then((value) => {
                 this.setState({
                     tabs: tabs,
                     currentTabId: value ? value : currentTabId
@@ -93,8 +94,23 @@ export default class TabsControl extends React.PureComponent {
             tabs: tabs,
             currentTabId: currentTabId
         })
-
-
+    }
+    tabReset(tab) {
+        var tabs = [...this.state.tabs];
+        var isInTabs = false;
+        tabs.map((ele) => {
+            if (ele.id === tab.id) {
+                ele = tab;
+                isInTabs = true;
+            }
+        })
+        if (isInTabs) { //如果重命名的文件在tabs中已打开，就更新tab名字
+            this.setState({
+                tabs: tabs,
+            });
+        } else { return; }
+        //如果重命名文件不在内存也不在tabs中，就只需要更新节点路径
+        //数据库中更改文件路径
     }
     getValue() {
         var value = this.monaco.current.editor.getValue()
@@ -170,7 +186,7 @@ export default class TabsControl extends React.PureComponent {
                                 : null
                         }
                         return (
-                            <li id={id} className={this.check_tittle_index(ele.id)} key={ele.id} title={tab_title}>
+                            <li id={id} className={this.checkTittleIndex(ele.id)} key={ele.id} title={tab_title}>
                                 <div>
                                     <span className={this.makeIcoClass(ele.name)} onClick={() => {
                                         this.tabClick(ele);
@@ -189,7 +205,7 @@ export default class TabsControl extends React.PureComponent {
                     {tabs.map((ele) => {
                         const id = "item_" + ele.id
                         return (
-                            <div id={id} key={ele.id} className={this.check_item_index(ele.id)}>
+                            <div id={id} key={ele.id} className={this.checkItemIndex(ele.id)}>
                                 <CodeEditor
                                     ref={this.monaco}
                                     language={this.setLanguage(ele.name)}
@@ -205,4 +221,5 @@ export default class TabsControl extends React.PureComponent {
         )
     }
 }
+
 
