@@ -15,12 +15,11 @@ export default class MonacoEditor extends React.PureComponent {
     }
 
     initMonaco() {
-        const { value, language, theme } = this.props
+        const { language, theme } = this.props
         if (!this.editor) {
             this.editor = monaco.editor.create(
                 this.monaco.current,
                 {
-                    value,
                     language,
                     theme,
                 }

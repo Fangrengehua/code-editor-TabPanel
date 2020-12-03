@@ -15,6 +15,7 @@ export default class TabsControl extends React.PureComponent {
         this.tabClose.bind(this);
         this.openInTab.bind(this);
         this.getValue.bind(this);
+        this.readFile.bind(this);
     }
 
     componentDidMount() {
@@ -42,11 +43,23 @@ export default class TabsControl extends React.PureComponent {
             tabs: tabs,
             currentTabId: tab.id
         })
-    }    tabClick(ele) {
+    }
+    tabClick(ele) {
         this.setState({ currentTabId: ele.id })
         if (this.props.configure) {
             this.props.configure.tabClick && this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
         }
+    }
+    readFile(filepath) {
+        let promise = this.props.readFile(filepath);
+        promise.then(
+            result => {
+                this.monaco.current.editor.setValue(result)
+            },
+            reason => {
+                console.log(reason)
+            }
+        )
     }
     tabClose(tab) {
         let tabs = [...this.state.tabs];
@@ -181,7 +194,7 @@ export default class TabsControl extends React.PureComponent {
                         if (configure) {
                             tab_title = configure.title ?
                                 (configure.title.show_title ?
-                                    (configure.title.content ? configure.title.content : ele.name)
+                                    (configure.title.content ? configure.title.content : ele.filepath)
                                     : null)
                                 : null
                         }
@@ -192,7 +205,6 @@ export default class TabsControl extends React.PureComponent {
                                         this.tabClick(ele);
                                     }} >{ele.name}</span>
                                     <img src={closeBT} alt='close' title='close' className='closeBT' onClick={() => {
-                                        //console.log("要删除的tab.id是：" + ele.id)
                                         this.tabClose(ele);
                                     }} />
                                 </div>
@@ -204,13 +216,13 @@ export default class TabsControl extends React.PureComponent {
                 <div className="Tab_item_wrap" >
                     {tabs.map((ele) => {
                         const id = "item_" + ele.id
+                        this.readFile(ele.filepath)
                         return (
                             <div id={id} key={ele.id} className={this.checkItemIndex(ele.id)}>
                                 <CodeEditor
                                     ref={this.monaco}
                                     language={this.setLanguage(ele.name)}
-                                    theme={this.props.theme ? this.props.theme : "vs-dark"}
-                                    value={ele.value}
+                                    theme={this.props.theme ? this.props.theme : "vs"}
                                     className={ele.name}
                                 />
                             </div>

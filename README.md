@@ -15,7 +15,7 @@
     -|-|-|
     id|string or number|标签唯一标识(用户指定)
     name|string|标签名(用户指定)
-    value|string|code-editor初始值(用户指定)
+    filepath|string|文件路径(用户指定)
     
 
     示例:
@@ -24,20 +24,29 @@
         {
             id: 1,
             name: "index.js",
-            value: 'index.js content'
+            filepath: '/pNode0 1/pNode1 1/index.js'
         },{
             id: 2,
             name: "App.css",
-            value: 'App.css content'
+            filepath: '/pNode0 1/App.css'
         }]
-     
+
+2. **readFile: 读取文件内容**   
+
+    readFile = (filepath)=>{return Promise}
+
+      - 参数说明：(string)文件路径
+      - 返回值：(Promise)
+
         
->(可选项) **configure: 相关事件配置**
+>可选项 
+
+**configure: 相关事件配置**
 
     - title: (object)
     
         - show_title: (bool)鼠标悬浮在导航栏标签上时，是否显示title
-        - content:(string)要显示的title内容
+        - content:(string)要显示的title内容，默认显示文件路径
     
     - 点击导航栏标签   
     
@@ -58,6 +67,13 @@
             - active_tab: (tab)下一个激活的tab。若关闭的tab为当前唯一存在的tab，则active_tab=null
             
             返回值：promise (可以通过resolve(nextTabId)指定下一个需要激活的tab id.默认激活当前tab,若关闭的是当前tab,则激活前一个tab)
+
+**theme: code-editor主题颜色**
+
+使用monaco-editor提供的主题颜色：'vs' (default), 'vs-dark', 'hc-black'.
+
+更多可见[monaco_editor](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandaloneeditorconstructionoptions.html#tabindex)
+
 
 ## Using
 
@@ -89,7 +105,7 @@
     
 在本组件上指定属性onRef
 
-    <TabsControl onRef={(ref) => {this.tab_control = ref;}}/>
+    <TabsControl onRef={(ref) => {this.tab_control = ref}}/>
     
 之后可以通过 this.tab_control 调用本组件内的方法：
 
@@ -117,7 +133,14 @@
 ```js
 import React from 'react'
 import TabsControl from 'file-code-editor'
-
+const files={
+  '/pNode0 1/pNode1 1/index.js':{
+    code:'/pNode0 1/pNode1 1/index.js'
+  },
+  '/pNode0 1/App.css':{
+    code:'/pNode0 1/App.css'
+  }
+}
 export default class App extends React.PureComponent{
     constructor(props) {
       super(props);
@@ -139,6 +162,15 @@ export default class App extends React.PureComponent{
           oEvent.preventDefault();
         }
       }  
+    }
+    readFile(filepath) {
+      return new Promise((resolve, reject) => {
+        if (1 < 2) {
+          resolve(files[filepath].code)
+        } else {
+          reject("error")
+        }      
+      })
     }
     tab_configure = {
       title: {
@@ -193,13 +225,12 @@ export default class App extends React.PureComponent{
       var tabs = this.state.tabs
       this.tab_control.tabClose && this.tab_control.tabClose(tabs[0])
     }
-    
-
     render() {
       return (
         <div className="App">
           <TabsControl
             tabs={this.state.tabs}
+            readFile={this.readFile}
             onRef={this.onRef}
             configure={this.tab_configure}
           />
