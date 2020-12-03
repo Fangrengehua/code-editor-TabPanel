@@ -38,10 +38,11 @@
       - 参数说明：(string)文件路径
       - 返回值：(Promise)
 
-        
+<br/>        
+
 >可选项 
 
-**configure: 相关事件配置**
+<font size="3"><strong>configure: 相关事件配置</strong></font><br/>
 
     - title: (object)
     
@@ -68,11 +69,14 @@
             
             返回值：promise (可以通过resolve(nextTabId)指定下一个需要激活的tab id.默认激活当前tab,若关闭的是当前tab,则激活前一个tab)
 
-**theme: code-editor主题颜色**
+<font size="3"><strong>theme: code-editor主题颜色</strong></font><br/>
 
-使用monaco-editor提供的主题颜色：'vs' (default), 'vs-dark', 'hc-black'.
+<font size="2">使用monaco-editor提供的主题颜色：'vs' (default), 'vs-dark', 'hc-black'.
+</font><br/>
+<font size="2">更多可见[monaco-editor](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandaloneeditorconstructionoptions.html#tabindex)
 
-更多可见[monaco_editor](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandaloneeditorconstructionoptions.html#tabindex)
+</font><br/>
+
 
 
 ## Using
