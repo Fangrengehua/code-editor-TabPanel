@@ -38,6 +38,7 @@ export default class TabsControl extends React.PureComponent {
             }
         }
         //还没在tabs中打开
+        this.readFile(tab.filepath)
         tabs.push(tab);
         this.setState({
             tabs: tabs,
@@ -54,7 +55,9 @@ export default class TabsControl extends React.PureComponent {
         let promise = this.props.readFile(filepath);
         promise.then(
             result => {
-                this.monaco.current.editor.setValue(result)
+                if (this.monaco.current) {
+                    this.monaco.current.editor.setValue(result)
+                }
             },
             reason => {
                 console.log(reason)
@@ -216,7 +219,6 @@ export default class TabsControl extends React.PureComponent {
                 <div className="Tab_item_wrap" >
                     {tabs.map((ele) => {
                         const id = "item_" + ele.id
-                        this.readFile(ele.filepath)
                         return (
                             <div id={id} key={ele.id} className={this.checkItemIndex(ele.id)}>
                                 <CodeEditor

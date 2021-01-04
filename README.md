@@ -132,6 +132,9 @@
 
         返回值：value 当前打开的编辑器的内容(string)
 
+> **notice**
+
+在设置包裹该组件的容器样式时，若将position设置为relative，会无法显示monaco-edtitor代码提示功能中的icon
 
 ## example
 ```js
