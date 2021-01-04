@@ -134,7 +134,8 @@
 
 > **notice**
 
-在设置包裹该组件的容器样式时，若将position设置为relative，会无法显示monaco-edtitor代码提示功能中的icon
+1. 在设置包裹该组件的容器样式时，若将position设置为relative，会无法显示monaco-edtitor代码提示功能中的icon
+2. 在electron中使用该组件时，请使用 `node ./node_modules/electron/cli.js .` 命令启动项目，使用 `electron .` 会导致控制台报错
 
 ## example
 ```js
