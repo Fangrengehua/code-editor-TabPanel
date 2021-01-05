@@ -123,9 +123,10 @@
         参数说明：(tab)要关闭的tab
         无返回值
 
-    - this.tab_control.tabReset(tab)
+    - this.tab_control.tabReset(newname:string, index:number)
 
-        参数说明：(tab)要重置的tab
+        newname: 新tab名
+        index：重命名tab在tabs中的索引
         无返回值
 
     - this.tab_control.getValue()

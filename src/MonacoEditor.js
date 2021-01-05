@@ -22,6 +22,7 @@ export default class MonacoEditor extends React.PureComponent {
                 {
                     language,
                     theme,
+                    automaticLayout: true
                 }
             );
             return this.editor;
@@ -30,7 +31,6 @@ export default class MonacoEditor extends React.PureComponent {
 
     render() {
         return (
-            <div id="monaco" className="monaco-container" ref={this.monaco} />
-        )
+            <div className={"monaco-container " + this.props.className} ref={this.monaco} />)
     }
 }
