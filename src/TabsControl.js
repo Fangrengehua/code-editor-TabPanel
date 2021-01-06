@@ -325,7 +325,7 @@ export default class TabsControl extends React.PureComponent {
         this.monaco.current.editor.layout()
     }
     setEditorLanguage(uri, language) {
-        if (!this.monaco.current) { return }
+        // if (!this.monaco.current) { return }
         var model = monaco.editor.getModel(uri)
         monaco.editor.setModelLanguage(model, language)
         //console.log(this.state.tabs[i].uri)
