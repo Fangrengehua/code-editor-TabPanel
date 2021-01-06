@@ -306,7 +306,6 @@ export default class TabsControl extends React.PureComponent {
         }
         //还没在tabs中打开
         this.readFile(tab.filepath)
-        //console.log("aaa", tab)
         tab.uri = "inmemory://model/" + this.modelCount
         this.modelCount++;
         tabs.push(tab);
@@ -314,26 +313,20 @@ export default class TabsControl extends React.PureComponent {
             tabs: tabs,
             currentTabId: tab.id
         })
-        return tabs
+        return tabs;
     }
     tabClick(ele) {
         this.setState({ currentTabId: ele.id })
-        //this.monaco.current.editor.getValue()
-        //console.log(this.monaco.current.editor.getModel().uri._formatted)
         if (this.props.configure) {
             this.props.configure.tabClick && this.props.configure.tabClick(ele).then(null, reason => { console.log(reason) });
         }
-        //console.log(ele.uri)
     }
     layout() {
         this.monaco.current.editor.layout()
     }
-    setEditorLanguage(i, language) {
-        //var monacoContainer = document.getElementsByClassName('no-user-select')
-        //var a=monacoContainer[i].getAttribute('data-uri')
-        //console.log(monacoContainer[i].attributes["data-uri"])
+    setEditorLanguage(uri, language) {
         if (!this.monaco.current) { return }
-        var model = monaco.editor.getModel(this.state.tabs[i].uri)
+        var model = monaco.editor.getModel(uri)
         monaco.editor.setModelLanguage(model, language)
         //console.log(this.state.tabs[i].uri)
     }
@@ -419,6 +412,7 @@ export default class TabsControl extends React.PureComponent {
         // 如果重命名文件不在内存也不在tabs中，就只需要更新节点路径
         // 数据库中更改文件路径
     }
+
     getValue() {
         var value = this.monaco.current.editor.getValue()
         return value;
@@ -527,4 +521,3 @@ export default class TabsControl extends React.PureComponent {
         )
     }
 }
-
