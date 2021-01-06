@@ -301,12 +301,12 @@ export default class TabsControl extends React.PureComponent {
                 this.setState({
                     currentTabId: tab.id
                 })
-                return;
+                return tabs;
             }
         }
         //还没在tabs中打开
         this.readFile(tab.filepath)
-        console.log("aaa", tab)
+        //console.log("aaa", tab)
         tab.uri = "inmemory://model/" + this.modelCount
         this.modelCount++;
         tabs.push(tab);
@@ -314,6 +314,7 @@ export default class TabsControl extends React.PureComponent {
             tabs: tabs,
             currentTabId: tab.id
         })
+        return tabs
     }
     tabClick(ele) {
         this.setState({ currentTabId: ele.id })
@@ -334,7 +335,7 @@ export default class TabsControl extends React.PureComponent {
         if (!this.monaco.current) { return }
         var model = monaco.editor.getModel(this.state.tabs[i].uri)
         monaco.editor.setModelLanguage(model, language)
-        console.log(this.state.tabs[i].uri)
+        //console.log(this.state.tabs[i].uri)
     }
     readFile(filepath) {
         let promise = this.props.readFile(filepath);
@@ -387,41 +388,36 @@ export default class TabsControl extends React.PureComponent {
                     currentTabId: currentTabId
                 })
             })
-            return;
+            return tabs;
         }
         this.setState({
             tabs: tabs,
             currentTabId: currentTabId
         })
+        return tabs;
     }
-    tabReset(newname, index) {
+    tabReset(tab) {
         var tabs = [...this.state.tabs];
-        // var isInTabs = false;
-        tabs[index].name = newname;
-        var pathArray = tabs[index].filepath.split('/')
-        pathArray.pop()
-        pathArray.push(newname)
-        tabs[index].filepath = pathArray.join('/')
-        //console.log(tabs[index])
-        // tabs.map((ele) => {
-        //     if (ele.id === tab.id) {
-        //         ele = tab;
-        //         isInTabs = true;
-        //     }
-        // })
-        var language = this.setLanguage(newname)
-        this.setEditorLanguage(index, language)
-
-        this.setState({
-            tabs: tabs,
-        });
-        // if (isInTabs) { //如果重命名的文件在tabs中已打开，就更新tab名字
-        //     this.setState({
-        //         tabs: tabs,
-        //     });
-        // } else { return; }
-        //如果重命名文件不在内存也不在tabs中，就只需要更新节点路径
-        //数据库中更改文件路径
+        var isInTabs = false;
+        var uri = null
+        tabs.map((ele) => {
+            if (ele.id === tab.id) {
+                ele.name = tab.name;
+                ele.filepath = tab.filepath;
+                uri = ele.uri
+                isInTabs = true;
+            }
+        })
+        if (isInTabs) { //如果重命名的文件在tabs中已打开，就更新tab名字
+            var language = this.setLanguage(tab.name)
+            this.setEditorLanguage(uri, language)
+            this.setState({
+                tabs: tabs,
+            });
+            return tabs;
+        } else { return tabs }
+        // 如果重命名文件不在内存也不在tabs中，就只需要更新节点路径
+        // 数据库中更改文件路径
     }
     getValue() {
         var value = this.monaco.current.editor.getValue()

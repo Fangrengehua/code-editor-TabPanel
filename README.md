@@ -116,18 +116,17 @@
     - this.tab_control.openInTab(tab)
             
         参数说明：(tab)要打开/激活的tab
-        无返回值
+        返回值: (tab数组)tabs
 
     - this.tab_control.tabClose(tab)
             
         参数说明：(tab)要关闭的tab
-        无返回值
+        返回值: (tab数组)tabs
 
-    - this.tab_control.tabReset(newname:string, index:number)
+    - this.tab_control.tabReset(tab)
 
-        newname: 新tab名
-        index：重命名tab在tabs中的索引
-        无返回值
+        参数说明：(tab)要重命名的tab
+        返回值: (tab数组)tabs
 
     - this.tab_control.getValue()
 
@@ -216,10 +215,9 @@ export default class App extends React.PureComponent{
         value: "file" + this.state.count
       }
       var tabs = [...this.state.tabs]
-      tabs.push(tab)
+      //tabs.push(tab)
+      tabs=this.tab_control.openInTab(tab)
       this.setState({ tabs: tabs })
-      
-      this.tab_control.openInTab(tab)
     }
     changeTab() {
       var tabs = this.state.tabs
@@ -228,11 +226,13 @@ export default class App extends React.PureComponent{
         name: "file" + this.state.count,
         value: "file" + this.state.count
       }
-      this.tab_control.openInTab(tabs[1])
+      tabs=this.tab_control.openInTab(tabs[1])
+      this.setState({ tabs: tabs })
     }
     closeTab() {
       var tabs = this.state.tabs
-      this.tab_control.tabClose && this.tab_control.tabClose(tabs[0])
+      tabs=this.tab_control.tabClose && this.tab_control.tabClose(tabs[0])
+      this.setState({ tabs: tabs })
     }
     render() {
       return (
